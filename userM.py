@@ -19,9 +19,10 @@ class User:
             headers.writeheader()
 
         # add Existing accounts from file
-        self.accounts = []
 
-    def new_account(self, bank_name, account_number, cart_number, initial_amount, account_balance):
+        # self.accounts = []
+
+    def new_account(self, bank_name, account_number, cart_number, initial_amount):
         """BY CALLING THIS FUNCTION USER CAN MAKE A NEW ACCOUNT AND ADD IT TO THE USERS ACCOUNT.CSV IF DOES NOT EXITS
         ,WHEN THE ACCOUNT IS ADDED A TRANSACTION.CSV FILE IS MADE FOR ADDING TRANSACTIONS WHICH ARE RELATED TO THAT ACCOUNT
         """
@@ -29,7 +30,7 @@ class User:
         self.account_number = account_number
         self.initial_amount = initial_amount
         self.cart_number = cart_number
-        self.account_balance = account_balance
+        self.account_balance = initial_amount
         # os.path.join(path, bank_name)
         try:
             path = '/Users/Niktab/Desktop/AI/MaktabSahrif/projects/accounting/users/users_info/mohammad'
@@ -56,8 +57,8 @@ class User:
 
     # self.accounts.append(Account(account_number, initial_amount, bank_name, cart_number))
 
-    def spend(self, unique, value, category):
-
+    def spend(self, unique, value, category, ):
+        # unique == account_number or cart_number
         for account in self.accounts:
             if account.account_number == unique or account.cart_number == unique:
                 account.spend_account_balance(value)
@@ -79,5 +80,5 @@ class User:
 #             print(account)
 
 mohammad = User()
-mohammad.new_account("tejarat".capitalize(), 1234, 5000, 43321, 10000)
+mohammad.new_account("tejarat".capitalize(), 1234, 5000, 43321)
 print(mohammad)
