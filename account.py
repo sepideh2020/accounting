@@ -51,3 +51,4 @@ class Account(Logging):
     def check_transactions(self, bank_name, account_number):
         pass
     # open the transaction file which is in the bank folder and print it
+#ۀّالنتناتن
