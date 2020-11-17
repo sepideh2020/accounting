@@ -1,5 +1,6 @@
 import logging
 import os
+import pandas as pd
 
 
 class Account:
@@ -23,8 +24,9 @@ class Account:
         f_handler.setFormatter(f_format)
         self.logger.addHandler(f_handler)
         # make csv file for each account
-        self.csv_file = open(os.path.join(directory, '{}.csv'.format(account_number)), 'a')
-
+        df = pd.DataFrame(list(), columns=['account_number', 'value', "category", "type"])
+        df.to_csv(os.path.join(directory, '{}.csv'.format(account_number)))
+        self.csv_file = os.path.join(directory, '{}.csv'.format(account_number))
 
     @classmethod
     def new_income(cls, income):

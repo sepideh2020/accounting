@@ -1,7 +1,7 @@
 import logging
 import os
 import pandas as pd
-
+from csv import writer
 from account import Account
 
 
@@ -34,9 +34,12 @@ class User:
             if account.account_number == unique or account.cart_number == unique:
                 if account.spend_account_balance(value):
                     account.logger.warning("{} toman spend for {} ".format(value, category))
-                    spend = pd.DataFrame([[account.account_number, value, category, "spend"]],
-                                         columns=['account_number', 'value', "category", "type"])
-                    spend.to_csv(account.csv_file)
+                    with open(account.csv_file, 'a') as csv_file:
+                        spend = pd.DataFrame([account.account_number, value, category, "spend"])
+                        spend.to_csv(csv_file, header=False)
+
+                    # spend = pd.DataFrame([account.account_number, value, category, "spend"])
+                    # spend.to_csv(account.csv_file)
 
                 else:
                     account.logger.warning("your balance is not enough for to spend money for {} ".format(category))
@@ -51,9 +54,11 @@ class User:
             if account.account_number == unique or account.cart_number == unique:
                 account.earn_income(value)
                 account.logger.warning("{} toman earn form {} ".format(value, category))
-                spend = pd.DataFrame([[account.account_number, value, category, "earn"]],
-                                     columns=['account_number', 'value', "category", "type"])
-                spend.to_csv(account.csv_file)
+                with open(account.csv_file, 'a') as csv_file:
+                    earn = pd.DataFrame([account.account_number, value, category, "earn"])
+                    earn.to_csv(csv_file, header=False)
+                # spend = pd.DataFrame([account.account_number, value, category, "earn"])
+                # spend.to_csv(account.csv_file)
                 return True
         else:
             return False
