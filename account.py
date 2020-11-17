@@ -1,7 +1,6 @@
 import logging
 import os
-from pathlib import Path
-import csv
+import pandas as pd
 
 
 class Account:
@@ -25,16 +24,9 @@ class Account:
         f_handler.setFormatter(f_format)
         self.logger.addHandler(f_handler)
         # make csv file for each account
-        # self.csv_file = open(os.path.join(directory, '{}.csv'.format(account_number)), 'a')
-        user_accounts = Path(
-            os.path.join(directory, '{}.csv'.format(account_number)), 'w')
-        if user_accounts.is_file():  # check if the user_accounts.csv file exists
-            pass
-        else:
-            self.csv_file = open(os.path.join(directory, '{}.csv'.format(account_number)), 'a')
-            fieldnames = ['Bank Name', 'Account Number', 'Card Number', 'Initial Amount', 'Account Balance']
-            headers = csv.DictWriter(self.csv_file, fieldnames=fieldnames)
-            headers.writeheader()
+        df = pd.DataFrame(list(), columns=['account_number', 'value', "category", "type"])
+        df.to_csv(os.path.join(directory, '{}.csv'.format(account_number)))
+        self.csv_file = os.path.join(directory, '{}.csv'.format(account_number))
 
     @classmethod
     def new_income(cls, income):
