@@ -1,54 +1,67 @@
-from logging import Logging
+import logging
+import os
+from pathlib import Path
+import csv
 
 
-# in run.py first make an empty folder whose name is the user's name
-class Account(Logging):
-    def __init__(self, user_name, password):
-        super().__init__(user_name, password)
-        self.bank_name = 0
-        self.account_number = 0
-        self.card_number = 0
-        self.deposit = 0
-        self.expense = 0
-        self.income = 0
-        self.account_balance = 0
-        self.expense_type = ["cloth", "rent", "tuition", "other"]
-        self.income_type = ["salary", "stock", "gift", "other"]
+class Account:
+    # there are two class variable that are type of incomes and costs
+    income = ["Food", "clothing", "housing"]
+    cost = ["Salary", "profit_of_capital", "inheritance"]
 
-    def add_new_account(self, new_bank_name, new_account_number, new_card_number, new_deposit):
-        self.bank_name = new_bank_name
-        self.account_number = new_account_number
-        self.card_number = new_card_number
-        self.deposit = new_deposit
-        self.account_balance = new_deposit
-        # go to the users folder
-        # make an empty csv file for user's bank info
-        # if user's bank info exits add info to it else make a users_bank_info.csv
-        # add the info to the csv file (in the user folder(user bank information)
-        # if bank directory does not exist make an empty directory
-        # in the bank directory make transaction csv file for each account and add the info to it
+    def __init__(self, account_number, initial_amount, bank_name, cart_number, directory):
+        """for each account init it`s attributes then create .log and .csv for it """
+        self.account_number = account_number
+        # first balance of account
+        self.initial_amount = initial_amount
+        self.bank_name = bank_name
+        self.cart_number = cart_number
+        self.balance = initial_amount
+        # make log file for each account
+        self.logger = logging.getLogger(self.account_number)
+        f_handler = logging.FileHandler(os.path.join(directory, '{}.log'.format(account_number)))
+        f_handler.setLevel(logging.INFO)
+        f_format = logging.Formatter('%(message)s in %(asctime)s')
+        f_handler.setFormatter(f_format)
+        self.logger.addHandler(f_handler)
+        # make csv file for each account
+        # self.csv_file = open(os.path.join(directory, '{}.csv'.format(account_number)), 'a')
+        user_accounts = Path(
+            os.path.join(directory, '{}.csv'.format(account_number)), 'w')
+        if user_accounts.is_file():  # check if the user_accounts.csv file exists
+            pass
+        else:
+            self.csv_file = open(os.path.join(directory, '{}.csv'.format(account_number)), 'a')
+            fieldnames = ['Bank Name', 'Account Number', 'Card Number', 'Initial Amount', 'Account Balance']
+            headers = csv.DictWriter(self.csv_file, fieldnames=fieldnames)
+            headers.writeheader()
 
-    def add_expense(self, bank_name, account_number, expense, expense_type):
-        pass
-        # in the run ask the user to enter the account number
-        # ask the user type of expense (in the run file)add  the date and type to the transaction.csv
-        # check the account number and bank name in the bank_info.csv
-        # if file exits add the transaction to bank_name transaction csv file
-        # tell the user file does not exits
-        # update the account balance
-        # then log and add it to the log file which is beside transactions.csv file
+    @classmethod
+    def new_income(cls, income):
+        """add new in come type"""
+        cls.income.append(income)
 
-    def add_income(self, bank_name, account_number, income, income_type):
-        pass
-        # in the run ask the user to enter the account number
-        # ask the user type of income (in the run file)add  the date and type to the transaction.csv
-        # check the account number and bank name in the bank_info.csv
-        # if exits add the transaction to bank_name transaction csv file
-        # tell the user file does not exits
-        # update the account balance
-        # then log and add it to the log file which is beside transactions.csv file
+    @classmethod
+    def new_cost(cls, cost):
+        """add new cost"""
+        cls.cost.append(cost)
 
-    def check_transactions(self, bank_name, account_number):
-        pass
-    # open the transaction file which is in the bank folder and print it
-#ۀّالنتناتن
+    def spend_account_balance(self, amount):
+        """check for spend if possible return True and change balance else return false"""
+        if self.balance < amount:
+            return False
+        else:
+            self.balance -= amount
+            return True
+
+    def earn_income(self, amount):
+        """update balance after earn """
+        self.balance += amount
+
+    def __str__(self):
+        """print for account"""
+        return "Balance:" + str(self.balance) + "Bank_name:" + self.bank_name + "cart_number :" + self.cart_number
+
+# a = Account("50222910", "1000", "pasargad", "552", "mahnaz_divargar")
+# b = Account("50222920", "1000", "pasargad", "552", "mahnaz_divargar")
+# a.logger.warning('This is a warning')
