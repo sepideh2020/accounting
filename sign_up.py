@@ -26,9 +26,13 @@ class SignUp:
                 headers = csv.DictWriter(users_info, fieldnames=fieldnames)
                 headers.writeheader()
 
-        logging.basicConfig(filename='users_info/users_information.log', level=logging.INFO, filemode='w',
-                            format='%(name)s - %(levelname)s - %(message)s-%(asctime)s', datefmt='%d-%b-%y %H:%M:%S')
-        logging.info('New user added at :')
+        self.logger = logging.getLogger(new_username)
+        f_handler = logging.FileHandler("users_info/accounts.log")
+        f_handler.setLevel(logging.WARNING)
+        f_format = logging.Formatter(' %(levelname)s - %(message)s-%(asctime)s', datefmt='%d-%b-%y %H:%M:%S')
+        f_handler.setFormatter(f_format)
+        # Add handlers to the logger
+        self.logger.addHandler(f_handler)
 
     def check_new_user_info(self):
         fieldnames = ['User Name', 'Password']
@@ -37,7 +41,8 @@ class SignUp:
         for line in f:
             details = line.strip().split(",")
             if self.new_username == details[0] and (self.new_password) == details[1]:
-                logging.error('user already exists')
+                self.logger.error("{} already exists".format(self.new_username))
+
                 break
             # add the user's username and pass to the main csv file
 
@@ -50,10 +55,12 @@ class SignUp:
                 writer = csv.DictWriter(check_account_existence, fieldnames=fieldnames)
                 # row['User Name'] = self.new_username
                 writer.writerow({'User Name': self.new_username, 'Password': self.new_password})
-            logging.warning("user added")
+            # logging.warning("{} added".format(self.new_username)) chera neshonesh nemide?
+            self.logger.warning("{} added".format(self.new_username))
 
             # add the user's username and pass added to the user_accounts.csv
-#
+
+
 # mohammad = SignUp("MOHAMMAD", "ALI")
 # mohammad.check_new_user_info()
 # mehdi = SignUp("hossain", "ALI")

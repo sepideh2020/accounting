@@ -1,7 +1,6 @@
 import logging
 import os
 import pandas as pd
-from csv import writer
 from account import Account
 
 
