@@ -42,14 +42,15 @@ class SignIn:
             details = line.strip().split(",")
             if self.username == details[0] and (self.password) == details[1]:
                 self.logger.warning("{} logged in ".format(self.username))
-                break
+                return True
 
         else:
 
             self.logger.error("{} does not exists ".format(self.username))
+            return False
 
-
-mohammad = SignIn("MOHAMMAD", "ALI")
-mohammad.check_user_info()
-mehdi = SignIn("hossain", "ALI")
-mehdi.check_user_info()
+#
+# mohammad = SignIn("MOHAMMAD", "ALI")
+# mohammad.check_user_info()
+# mehdi = SignIn("hossain", "ALI")
+# mehdi.check_user_info()

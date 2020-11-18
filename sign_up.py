@@ -40,10 +40,10 @@ class SignUp:
         f = open('users_info/user_information.csv', 'r')
         for line in f:
             details = line.strip().split(",")
-            if self.new_username == details[0] and (self.new_password) == details[1]:
+            if self.new_username == details[0] and self.new_password == details[1]:
                 self.logger.error("{} already exists".format(self.new_username))
 
-                break
+                return False
             # add the user's username and pass to the main csv file
 
         else:
@@ -59,6 +59,7 @@ class SignUp:
             self.logger.warning("{} added".format(self.new_username))
 
             # add the user's username and pass added to the user_accounts.csv
+            return True
 
 
 # mohammad = SignUp("MOHAMMAD", "ALI")
