@@ -11,22 +11,28 @@ class Account:
     def __init__(self, account_number, initial_amount, bank_name, cart_number, directory):
         """for each account init it`s attributes then create .log and .csv for it """
         self.account_number = account_number
-        # first balance of account
-        self.initial_amount = initial_amount
         self.bank_name = bank_name
         self.cart_number = cart_number
         self.balance = initial_amount
+
         # make log file for each account
         self.logger = logging.getLogger(self.account_number)
-        f_handler = logging.FileHandler(os.path.join(directory, '{}.log'.format(account_number)))
+        f_handler = logging.FileHandler(os.path.join(r"users\{}".format(directory), '{}.log'.format(account_number)))
         f_handler.setLevel(logging.INFO)
         f_format = logging.Formatter('%(message)s in %(asctime)s')
         f_handler.setFormatter(f_format)
         self.logger.addHandler(f_handler)
+
         # make csv file for each account
-        df = pd.DataFrame(list(), columns=['account_number', 'value', "category", "type"])
-        df.to_csv(os.path.join(directory, '{}.csv'.format(account_number)))
-        self.csv_file = os.path.join(directory, '{}.csv'.format(account_number))
+        if os.path.exists('./users/{}/{}.csv'.format(directory, account_number)):
+            with open('./users/{}/{}.csv'.format(directory, account_number)) as f:
+                len_of_lines = f.readlines()
+                self.csv_file_index = len(len_of_lines)
+        else:
+            df = pd.DataFrame(list(), columns=['row', 'account_number', 'value', "category", "balance", "type"])
+            df.to_csv(os.path.join(r"users\{}".format(directory), '{}.csv'.format(account_number)), index=False)
+            self.csv_file_index = 1
+        self.csv_file = os.path.join(r"users\{}".format(directory), '{}.csv'.format(account_number))
 
     @classmethod
     def new_income(cls, income):

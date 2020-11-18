@@ -1,31 +1,57 @@
 import logging
 import os
 import pandas as pd
-from csv import writer
 from account import Account
 
 
 class User:
-    def __init__(self, user_name):
+    def __init__(self, user_name, password, account_csv_file=None):
         """for each user make directory that has info of accounts"""
         self.user_name = user_name
+        self.password = password
         self.accounts = []
+
         # create folder for each user
-        os.system("mkdir {}".format(user_name))
+        if os.path.exists('./users/{}'.format(user_name)):
+            pass
+        else:
+            os.system(r"mkdir users\{}".format(user_name))
+
         # make log file for each user to see log of crate new account
         self.logger = logging.getLogger(user_name)
-        f_handler = logging.FileHandler(os.path.join(user_name, "accounts.log"))
+        f_handler = logging.FileHandler(os.path.join(r"users\{}".format(user_name), "accounts.log"))
         f_handler.setLevel(logging.DEBUG)
         f_format = logging.Formatter('%(message)s in  %(asctime)s  ')
         f_handler.setFormatter(f_format)
-        # Add handlers to the logger
         self.logger.addHandler(f_handler)
+
+        # make csv file for each user to see detail of crate accounts
+        if account_csv_file is None:
+            df = pd.DataFrame(list(), columns=['row', 'account_number', 'bank_name', "cart_number", "balance"])
+            df.to_csv(os.path.join(r"users\{}".format(user_name), 'accounts.csv'), index=False)
+            self.csv_file_index = 1
+        else:
+            with open("users/{}/{}".format(user_name, account_csv_file), "r") as f:
+                len_of_lines = f.readlines()
+                self.csv_file_index = len(len_of_lines)
+
+        self.csv_file = os.path.join(r"users\{}".format(user_name), 'accounts.csv')
 
     def new_account(self, account_number, initial_amount, bank_name, cart_number):
         """create new account for user in his directory and make log to know account create"""
         self.accounts.append(Account(account_number, initial_amount, bank_name, cart_number, self.user_name))
+        # make log for each account that create
         self.logger.warning(
             "{} account with {} account_number added successfully".format(self.user_name, account_number))
+
+        # add row in csv file for accounts
+        csv_file_of_accounts = pd.read_csv(self.csv_file)
+        new_transactions = {'row': self.csv_file_index, 'account_number': account_number,
+                            'bank_name': bank_name, "cart_number": cart_number, "balance": initial_amount}
+        self.csv_file_index += 1
+        csv_file_of_accounts.loc[len(csv_file_of_accounts)] = new_transactions
+
+        csv_file_of_accounts.to_csv(self.csv_file, index=False)
 
     def spend(self, unique, value, category):
         """give account_number or card_number as unique then find account and do spend code
@@ -34,12 +60,15 @@ class User:
             if account.account_number == unique or account.cart_number == unique:
                 if account.spend_account_balance(value):
                     account.logger.warning("{} toman spend for {} ".format(value, category))
-                    with open(account.csv_file, 'a') as csv_file:
-                        spend = pd.DataFrame([account.account_number, value, category, "spend"])
-                        spend.to_csv(csv_file, header=False)
+                    csv_file_of_account = pd.read_csv(account.csv_file)
+                    new_transactions = {"row": account.csv_file_index, "account_number": account.account_number,
+                                        "value": value, "category": category, "balance": account.balance,
+                                        "type": "spend"}
+                    account.csv_file_index += 1
+                    csv_file_of_account.loc[len(csv_file_of_account)] = new_transactions
 
-                    # spend = pd.DataFrame([account.account_number, value, category, "spend"])
-                    # spend.to_csv(account.csv_file)
+                    csv_file_of_account.to_csv(account.csv_file, index=False)
+                    self.update_user_csv_file(account.account_number, account.balance)
 
                 else:
                     account.logger.warning("your balance is not enough for to spend money for {} ".format(category))
@@ -54,11 +83,14 @@ class User:
             if account.account_number == unique or account.cart_number == unique:
                 account.earn_income(value)
                 account.logger.warning("{} toman earn form {} ".format(value, category))
-                with open(account.csv_file, 'a') as csv_file:
-                    earn = pd.DataFrame([account.account_number, value, category, "earn"])
-                    earn.to_csv(csv_file, header=False)
-                # spend = pd.DataFrame([account.account_number, value, category, "earn"])
-                # spend.to_csv(account.csv_file)
+                csv_file_of_account = pd.read_csv(account.csv_file)
+                new_transactions = {"row": account.csv_file_index, "account_number": account.account_number,
+                                    "value": value, "category": category, "balance": account.balance, "type": "earn"}
+                account.csv_file_index += 1
+                csv_file_of_account.loc[len(csv_file_of_account)] = new_transactions
+                csv_file_of_account.to_csv(account.csv_file, index=False)
+
+                self.update_user_csv_file(account.account_number, account.balance)
                 return True
         else:
             return False
@@ -85,3 +117,9 @@ class User:
                 return True
         else:
             return False
+
+    def update_user_csv_file(self, account_number, balance):
+
+        csv_file_of_accounts = pd.read_csv(self.csv_file)
+        csv_file_of_accounts.loc[csv_file_of_accounts["account_number"] == account_number, "balance"] = balance
+        csv_file_of_accounts.to_csv(self.csv_file, index=False)
