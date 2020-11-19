@@ -5,8 +5,8 @@ import pandas as pd
 
 class Account:
     # there are two class variable that are type of incomes and costs
-    income = ["Food", "clothing", "housing"]
-    cost = ["Salary", "profit_of_capital", "inheritance"]
+    cost= ["Food", "clothing", "housing"]
+    income = ["Salary", "profit_of_capital", "inheritance"]
 
     def __init__(self, account_number, initial_amount, bank_name, cart_number, directory):
         """for each account init it`s attributes then create .log and .csv for it """
@@ -60,6 +60,3 @@ class Account:
         """print for account"""
         return "Balance:" + str(self.balance) + "Bank_name:" + self.bank_name + "cart_number :" + self.cart_number
 
-# a = Account("50222910", "1000", "pasargad", "552", "mahnaz_divargar")
-# b = Account("50222920", "1000", "pasargad", "552", "mahnaz_divargar")
-# a.logger.warning('This is a warning')

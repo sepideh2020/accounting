@@ -1,6 +1,7 @@
 import logging
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 from account import Account
 
 
@@ -39,6 +40,12 @@ class User:
 
     def new_account(self, account_number, initial_amount, bank_name, cart_number):
         """create new account for user in his directory and make log to know account create"""
+        with open(self.csv_file, "r") as f:
+            for account_info in f:
+                account_number_in_file = account_info.strip().split(",")
+                if account_number_in_file[1] == account_number:
+                    print("this account_number already exit")
+                    return
         self.accounts.append(Account(account_number, initial_amount, bank_name, cart_number, self.user_name))
         # make log for each account that create
         self.logger.warning(
@@ -123,3 +130,30 @@ class User:
         csv_file_of_accounts = pd.read_csv(self.csv_file)
         csv_file_of_accounts.loc[csv_file_of_accounts["account_number"] == account_number, "balance"] = balance
         csv_file_of_accounts.to_csv(self.csv_file, index=False)
+
+    def display_account_turnover_with_charts(self, unique):
+        for account in self.accounts:
+            if account.account_number == unique or account.cart_number == unique:
+                csv_file_of_account = pd.read_csv(account.csv_file)
+                data_for_chart = csv_file_of_account["balance"]
+                plt.plot(range(1, len(csv_file_of_account) + 1), data_for_chart, '-p')
+                plt.xticks(range(1, len(csv_file_of_account) + 1))
+                plt.xlabel("number of transactions")
+                plt.ylabel("toman")
+                plt.show()
+
+    def pie_chart(self, unique):
+        for account in self.accounts:
+            if account.account_number == unique or account.cart_number == unique:
+                plt.subplot(2, 1, 1)
+                csv_file_of_account = pd.read_csv(account.csv_file)
+                data_for_chart = csv_file_of_account[csv_file_of_account["type"] == "spend"]
+                data_for_chart.category.value_counts().plot.pie(autopct='%1.1f%%')
+                plt.title("costs")
+
+                plt.subplot(2, 1, 2)
+                data_for_chart = csv_file_of_account[csv_file_of_account["type"] == "earn"]
+                data_for_chart.category.value_counts().plot.pie(autopct='%1.1f%%')
+                plt.title("incomes")
+
+                plt.show()
