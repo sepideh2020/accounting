@@ -1,7 +1,7 @@
 from tkinter import *
 import os
-from sign_up import SignUp
 from sign_in import SignIn
+from sign_up import SignUp
 
 def delete2():
     screen3.destroy()
@@ -47,8 +47,8 @@ def register_user():
 
     username_info = username.get()
     password_info = password.get()
-    signup = SignUp(username_info, password_info)
-    signup.check_new_user_info()
+    signup = SignUp()
+    signup.new_user_info(username_info, password_info)
 
     # file = open(username_info, "w")
     # file.write(username_info + "\n")
@@ -67,9 +67,9 @@ def login_verify():
 
     username_entry1.delete(0, END)
     password_entry1.delete(0, END)
-    signIn = SignIn(username1, password1)
+    signIn = SignIn()
 
-    if signIn.check_user_info() == True:
+    if signIn.check_user_info(username1, password1) == True:
         login_sucess()
     else:
         user_not_found()
