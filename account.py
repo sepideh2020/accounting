@@ -7,6 +7,8 @@ class Account:
     # there are two class variable that are type of incomes and costs
     cost= ["Food", "clothing", "housing"]
     income = ["Salary", "profit_of_capital", "inheritance"]
+    dict_income = {0: 'other', 1 : 'salary', 2 : 'profit_of_capital', 3 : 'inheritance'}
+    dict_cost = {0: 'other', 1 : 'Food', 2 : 'clothing', 3 : 'housing'}
 
     def __init__(self, account_number, initial_amount, bank_name, cart_number, directory):
         """for each account init it`s attributes then create .log and .csv for it """
@@ -35,14 +37,18 @@ class Account:
         self.csv_file = os.path.join(r"users\{}".format(directory), '{}.csv'.format(account_number))
 
     @classmethod
-    def new_income(cls, income):
+    def new_income(cls, new_income):
         """add new in come type"""
-        cls.income.append(income)
+        new_income.lower()
+        cls.dict_income[len(cls.dict_income)] = new_income
+
+
 
     @classmethod
-    def new_cost(cls, cost):
+    def new_cost(cls, new_cost):
         """add new cost"""
-        cls.cost.append(cost)
+        new_cost.lower()
+        cls.dict_cost[len(cls.dict_cost)] = new_cost
 
     def spend_account_balance(self, amount):
         """check for spend if possible return True and change balance else return false"""

@@ -1,11 +1,10 @@
 import os
-
 import pandas as pd
-
 from account import Account
 from user import User
 from sign_in import SignIn
 from sign_up import SignUp
+
 
 # list of all user
 users = []
@@ -38,71 +37,124 @@ def load_old_users():
 load_old_users()
 sign_up = SignUp()
 sign_in = SignIn()
-user = users[1].display_account_turnover_with_charts("5022 2910 6268 9722")
-user = users[1].pie_chart("5022 2910 6268 9722")
+# user = users[1].display_account_turnover_with_charts("5022 2910 6268 9722")
+# user = users[1].pie_chart("5022 2910 6268 9722")
 
-# ثبت نام کردن در برنامه
-# for i in range(3):
-#     user_name = input("user_name:")
-#     pass_word = input("password:")
-#     if len(users) == 0:
-#         sign_up.new_user_info(user_name, pass_word)
-#         users.append(User(user_name, pass_word))
-#     else:
-#         for user in users:
-#             if user.user_name == user_name:
-#                 print('this user_name already exist chose another user_name')
-#                 break
-#         else:
-#             sign_up.new_user_info(user_name, pass_word)
-#             users.append(User(user_name, pass_word))
+op = 0
+while op != 9 :
+    print("\t   MAIN MENU")
+    print("\t1. REGISTER")
+    print("\t2. LOGIN")
+    print("\t4. NEW ACCOUNT ")
+    print("\t5. EARN")
+    print("\t6. SPEND")
+    print("\t7. TRANSACTIONS")
+    print("\t8. CLOSE AN ACCOUNT")
+    print("\t9. EXIT")
+    print("\t Select Your Option (1-8)")
+    op = int(input("ENTER :"))
 
+    if op == 1 :
 
-# login
-# user_name = input("user_name:")
-# pass_word = input("password:")
-# if sign_in.check_user_info(user_name, pass_word):
-#     for user in users:
-#         if user.user_name == user_name:
-#             current_object = user
-#             break
-# else:
-#     # یه حلقه که تا درست نشده خارج نشه یا خودش بخواد خارج شه
-#     print("some thing is not correct check 1.signup first 2.enter correct user or pass word")
+        user_name = input("user_name:")
+        pass_word = input("password:")
+        if len(users) == 0:
+            sign_up.new_user_info(user_name, pass_word)
+            users.append(User(user_name, pass_word))
+        else:
+            for user in users:
+                if user.user_name == user_name:
+                    print('this user_name already exist chose another user_name')
+                    break
+                else:
+                    sign_up.new_user_info(user_name, pass_word)
+                    users.append(User(user_name, pass_word))
 
-# # new account
-# # اول ببین اگر کارنت ابجکت خالی هست بگه لاگین کن
-# print("new account")
-# account_number = input("account_number:")
-# initial_amount = input("initial_amount:")
-# bank_name = input("bank_name")
-# cart_number = input("cart_number")
-#current_object.new_account(account_number, float(initial_amount), bank_name, cart_number)
-#
-# # spend
-# print(Account.cost)
-# account_number = input("account_number:")
-# value = float(input("value:"))
-# spend_type = input("type:")
-# if current_object.spend(account_number, value, spend_type):
-#     print("send successfully")
-# else:
-#     print("account_number wrong")
-#
-# # earn
-# print(Account.income)
-# account_number = input("account_number:")
-# value = float(input("value:"))
-# spend_type = input("type:")
-# if current_object.earn(account_number, value, spend_type):
-#     print("earn successfully")
-# else:
-#     print("account_number wrong")
-#
-# # new_spend_type
-# spend_type = input("type:")
-# Account.new_cost(spend_type)
-#
-# # new_income_type
-# income_type = input("type:")
-# Account.new_income(spend_type)
+    elif op == 2:
+        while True:
+            user_name = input("user_name:")
+            pass_word = input("password:")
+            if sign_in.check_user_info(user_name, pass_word):
+                for user in users:
+                    if user.user_name == user_name:
+                        current_object = user
+                        print('***Login Successful***\n')
+                        break
+                break
+            else:
+                print("***some thing is not correct check 1.signup first 2.enter correct user or pass word***")
+                print('Try Again\n')
+
+    elif op == 4:
+        if current_object is None:
+            print("***PLEASE LOGIN FIRST***\n")
+        else:
+            print("new account")
+            account_number = input("account_number:")
+            initial_amount = input("initial_amount:")
+            bank_name = input("bank_name")
+            cart_number = input("cart_number")
+            current_object.new_account(account_number, float(initial_amount), bank_name, cart_number)
+
+    elif op == 5:
+
+        if current_object is None:
+            print("***PLEASE LOGIN FIRST***\n")
+
+        else:
+            account_number = input("account_number:")
+            value = float(input("value:"))
+
+            while True:
+                print("\t   EARN CATEGORY")
+                for key, val in Account.dict_income.items():
+                    print("\t{}. {}".format(key, val))
+
+                spend_type = int(input("type:"))
+                if spend_type == 0:
+                    new_income_key = input("Enter new income:")
+                    Account.new_income(new_income_key)
+                    continue
+                else:
+                    spend_type = Account.dict_income[spend_type]
+
+                    if current_object.earn(account_number, value, spend_type):
+                        print("earn successfully")
+                    else:
+                        print("account_number wrong")
+                    break
+
+    elif op == 6:
+        if current_object is None:
+            print("***PLEASE LOGIN FIRST***\n")
+
+        else:
+            account_number = input("account_number:")
+            value = float(input("value:"))
+            while True:
+                print("\t   COST CATEGORY")
+                for key, val in Account.dict_cost.items() :
+                    print("\t{}. {}".format(key, val))
+
+                spend_type = int(input("type:"))
+                if spend_type == 0:
+                    new_cost_key = input("Enter new cost:")
+                    Account.new_cost(new_cost_key)
+                    continue
+                else:
+                    spend_type = Account.dict_cost[spend_type]
+
+                    if current_object.spend(account_number, value, spend_type):
+                        print("spend successfully")
+                    else:
+                        print("account_number wrong")
+
+    elif op ==7:
+        account_number = input("account_number:")
+        # current_object.display_account_turnover_with_charts(account_number)
+
+    elif op not in range(1, 10) :
+        print('Invalid operation.  Please try again.')
+
+else:
+    print('bye')
