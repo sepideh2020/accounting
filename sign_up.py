@@ -4,6 +4,7 @@ from pathlib import Path
 import logging
 
 
+
 class SignUp:
     """class for making a new user and check whether the user already exists or not"""
 
