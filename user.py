@@ -117,7 +117,7 @@ class User:
         if account exist return true else return false"""
         for account in self.accounts:
             if account.account_number == unique or account.cart_number == unique:
-                path = os.path.join(self.user_name, '{}.log'.format(account.account_number))
+                path = 'users/{}/{}.csv'.format(self.user_name, account.account_number)
                 log_file = open(path)
                 for line in log_file:
                     print(line)

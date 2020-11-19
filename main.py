@@ -4,7 +4,7 @@ from account import Account
 from user import User
 from sign_in import SignIn
 from sign_up import SignUp
-
+import time
 
 # list of all user
 users = []
@@ -41,7 +41,10 @@ sign_in = SignIn()
 # user = users[1].pie_chart("5022 2910 6268 9722")
 
 op = 0
-while op != 9 :
+while op != 11 :
+
+
+    print("\n")
     print("\t   MAIN MENU")
     print("\t1. REGISTER")
     print("\t2. LOGIN")
@@ -49,13 +52,16 @@ while op != 9 :
     print("\t5. EARN")
     print("\t6. SPEND")
     print("\t7. TRANSACTIONS")
-    print("\t8. CLOSE AN ACCOUNT")
-    print("\t9. EXIT")
+    print("\t8. ACCOUNT INFORMATION")
+    print("\t9. Display account turnover with pie charts")
+    print("\t10. Display account turnover with broken line chart")
+    print("\t11. EXIT")
     print("\t Select Your Option (1-8)")
     op = int(input("ENTER :"))
+    time.sleep(2)
+    os.system('cls')
 
     if op == 1 :
-
         user_name = input("user_name:")
         pass_word = input("password:")
         if len(users) == 0:
@@ -97,7 +103,6 @@ while op != 9 :
             current_object.new_account(account_number, float(initial_amount), bank_name, cart_number)
 
     elif op == 5:
-
         if current_object is None:
             print("***PLEASE LOGIN FIRST***\n")
 
@@ -120,6 +125,7 @@ while op != 9 :
 
                     if current_object.earn(account_number, value, spend_type):
                         print("earn successfully")
+
                     else:
                         print("account_number wrong")
                     break
@@ -148,12 +154,41 @@ while op != 9 :
                         print("spend successfully")
                     else:
                         print("account_number wrong")
+                    break
 
-    elif op ==7:
-        account_number = input("account_number:")
-        # current_object.display_account_turnover_with_charts(account_number)
+    elif op == 7:
+        if current_object is None:
+            print("***PLEASE LOGIN FIRST***\n")
 
-    elif op not in range(1, 10) :
+        else:
+            account_number = input("account_number:")
+            current_object.list_of_transactions(account_number)
+
+    elif op == 8:
+        if current_object is None:
+            print("***PLEASE LOGIN FIRST***\n")
+
+        else:
+            account_number = input("account_number:")
+            current_object.show_account(account_number)
+
+    elif op == 9:
+        if current_object is None:
+            print("***PLEASE LOGIN FIRST***\n")
+
+        else:
+            account_number = input("account_number:")
+            current_object.pie_chart(account_number)
+
+    elif op == 10:
+        if current_object is None:
+            print("***PLEASE LOGIN FIRST***\n")
+
+        else:
+            account_number = input("account_number:")
+            current_object.display_account_turnover_with_charts(account_number)
+
+    elif op not in range(1, 12) :
         print('Invalid operation.  Please try again.')
 
 else:
