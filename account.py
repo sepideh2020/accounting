@@ -3,6 +3,9 @@ import os
 import pandas as pd
 
 
+
+
+
 class Account:
     # there are two class variable that are type of incomes and costs
     cost= ["Food", "clothing", "housing"]
