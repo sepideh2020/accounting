@@ -49,7 +49,7 @@ class SignIn:#ورود
 
         else:
 
-            self.logger.error("{} enter wrong pass in ".format(username))
+            self.logger.error("{} entered wrong password".format(username))
             return False
 
 

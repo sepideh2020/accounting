@@ -42,7 +42,7 @@ class SignUp:  # ثبت نام
         f = open('users_info/user_information.csv', 'r')
         for line in f:
             details = line.strip().split(",")
-            if new_username == details[0] and new_password == details[1]:
+            if new_username == details[0]:
                 self.logger.error("{} already exists".format(new_username))
                 break
             # add the user's username and pass to the main csv file

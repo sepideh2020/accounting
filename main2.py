@@ -58,11 +58,13 @@ while True:
     print("\t7. Account Information")
     print("\t8. Display account turnover with Pie Charts")
     print("\t9. Display account turnover with broken Line Chart")
-    print("\t10.Exit")
-    print("\t Select Your Option (1-10)")
+    print("\t10.Log out")
+    print("\t11.Exit")
+
+    print("\t Select Your Option (1-11)")
     try:
-        op = int(input("ENTER :"))
-        if op in range(1, 11):
+        op = int(input("Enter:"))
+        if op in range(1, 12):
 
             if op == 1:
                 user_name = input("Username:")
@@ -212,27 +214,31 @@ while True:
 
             elif op == 6:
                 if current_object is None:
-                    print("***PLEASE LOGIN FIRST***\n")
+                    print("***Please login***\n")
 
                 else:
-                    account_number = input("account_number:")
-                    current_object.list_of_transactions(account_number)
+                    while True:
+                        try:
+                            account_number = int(input("Account number:"))
+                            current_object.list_of_transactions(account_number)
+                        except ValueError:
+                            logging.error("Enter a valid input")
 
             elif op == 7:
                 if current_object is None:
-                    print("***PLEASE LOGIN FIRST***\n")
+                    print("***Please login***\n")
 
                 else:
-                    account_number = input("account_number:")
+                    account_number = input("Account number:")
                     current_object.show_account(account_number)
                     # nabashe hesab chizi nemige!!
 
             elif op == 8:
                 if current_object is None:
-                    print("***PLEASE LOGIN FIRST***\n")
+                    print("***Please login***\n")
 
                 else:
-                    account_number = input("account_number:")
+                    account_number = input("Account number:")
                     current_object.pie_chart(account_number)
 
             elif op == 9:
@@ -242,7 +248,12 @@ while True:
                 else:
                     account_number = input("account_number:")
                     current_object.display_account_turnover_with_charts(account_number)
-            elif op == 10:
+            elif op==10:
+                current_object=None
+                print("Log out successfully")
+
+
+            elif op == 11:
                 print("Hope enjoyed our application")
                 sys.exit()
 
