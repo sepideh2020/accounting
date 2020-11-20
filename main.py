@@ -41,8 +41,7 @@ sign_in = SignIn()
 # user = users[1].pie_chart("5022 2910 6268 9722")
 
 op = 0
-while op != 11 :
-
+while op != 11:
 
     print("\n")
     print("\t   MAIN MENU")
@@ -61,7 +60,7 @@ while op != 11 :
     time.sleep(2)
     os.system('cls')
 
-    if op == 1 :
+    if op == 1:
         user_name = input("user_name:")
         pass_word = input("password:")
         if len(users) == 0:
@@ -105,7 +104,6 @@ while op != 11 :
     elif op == 5:
         if current_object is None:
             print("***PLEASE LOGIN FIRST***\n")
-
         else:
             account_number = input("account_number:")
             value = float(input("value:"))
@@ -139,7 +137,7 @@ while op != 11 :
             value = float(input("value:"))
             while True:
                 print("\t   COST CATEGORY")
-                for key, val in Account.dict_cost.items() :
+                for key, val in Account.dict_cost.items():
                     print("\t{}. {}".format(key, val))
 
                 spend_type = int(input("type:"))
@@ -188,8 +186,5 @@ while op != 11 :
             account_number = input("account_number:")
             current_object.display_account_turnover_with_charts(account_number)
 
-    elif op not in range(1, 12) :
+    elif op not in range(1, 12):
         print('Invalid operation.  Please try again.')
-
-else:
-    print('bye')

@@ -34,22 +34,24 @@ class SignIn:#ورود
         self.logger.addHandler(f_handler)
 
     def check_user_info(self, username, password):
+        try:
+            var = password.encode('utf-8')
+            password = hashlib.md5(var).hexdigest()
 
-        var = password.encode('utf-8')
-        password = hashlib.md5(var).hexdigest()
+            # check whether the user exits or not
 
-        # check whether the user exits or not
+            f = open('users_info/user_information.csv', 'r')
+            for line in f:
+                details = line.strip().split(",")
+                if username == details[0] and password == details[1]:
+                    self.logger.warning("{} logged in successfully ".format(username))
+                    return True
 
-        f = open('users_info/user_information.csv', 'r')
-        for line in f:
-            details = line.strip().split(",")
-            if username == details[0] and password == details[1]:
-                self.logger.warning("{} logged in successfully ".format(username))
-                return True
+            else:
 
-        else:
-
-            self.logger.error("{} entered wrong password".format(username))
+                self.logger.error("{} entered wrong password".format(username))
+                return False
+        except Exception:
             return False
 
 
