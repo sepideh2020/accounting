@@ -196,7 +196,6 @@ while True:
                             else:
                                 print(Colors.RED + "Wrong account number" + Colors.ENDC)
                                 break
-
             elif op == 5:
                 if current_object is None:
                     print(Colors.HEADER + "***Please login***" + Colors.ENDC)
