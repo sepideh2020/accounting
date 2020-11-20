@@ -62,4 +62,4 @@ class Account:
 
     def __str__(self):
         """print for account"""
-        return "Balance: {} Bank_name: {} cart_number: {}".format(str(self.balance), self.bank_name, self.cart_number)
+        return " Balance: {} \n Bank_name: {} \n cart_number: {}".format(str(self.balance), self.bank_name, self.cart_number)

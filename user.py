@@ -76,10 +76,11 @@ class User:
 
                     csv_file_of_account.to_csv(account.csv_file, index=False)
                     self.update_user_csv_file(account.account_number, account.balance)
+                    return True
 
                 else:
                     account.logger.warning("your balance is not enough for to spend money for {} ".format(category))
-                return True
+                    return False
         else:
             return False
 
@@ -119,8 +120,8 @@ class User:
             if account.account_number == unique or account.cart_number == unique:
                 path = 'users/{}/{}.csv'.format(self.user_name, account.account_number)
                 log_file = open(path)
-                for line in log_file:
-                    print(line)
+                transactions = pd.read_csv(log_file)
+                print (transactions.to_string(index=False))
                 return True
         else:
             return False
