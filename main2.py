@@ -118,6 +118,7 @@ while True:
                     if current_object is None:
                         print("***Please login***")
 
+
                     else:
                         dict = {}
                         with open(current_object.csv_file, "r") as f:
