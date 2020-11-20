@@ -5,10 +5,10 @@ import pandas as pd
 
 class Account:
     # there are two class variable that are type of incomes and costs
-    cost = ["Housing", "Food", "Clothing"]
-    income = ["Inheritance", "Salary", "Stock market", ]
-    dict_income = {1: 'other', 2: 'Salary', 3: 'Stock market', 4:'Inheritance'}
-    dict_cost = {1:'other', 2: 'Food', 3: 'clothing', 4: 'Housing'}
+    # cost = ["Housing", "Food", "Clothing"]
+    # income = ["Salary", "Stock market","Inheritance" ]
+    dict_income = {1: 'Other', 2: 'Stock market', 3: 'Inheritance', 4: 'Salary'}
+    dict_cost = {1: 'Other', 2: 'clothing', 3: 'Housing', 4: 'Food' }
 
     def __init__(self, account_number, initial_amount, bank_name, cart_number, directory):
         """for each account init it`s attributes then create .log and .csv for it """
@@ -40,13 +40,13 @@ class Account:
     def new_income(cls, new_income):
         """add new in come type"""
         new_income.lower()
-        cls.dict_income[len(cls.dict_income)] = new_income
+        cls.dict_income[len(cls.dict_income)+1] = new_income
 
     @classmethod
     def new_cost(cls, new_cost):
         """add new cost"""
         new_cost.lower()
-        cls.dict_cost[len(cls.dict_cost)] = new_cost
+        cls.dict_cost[len(cls.dict_cost)+1] = new_cost
 
     def spend_account_balance(self, amount):
         """check for spend if possible return True and change balance else return false"""

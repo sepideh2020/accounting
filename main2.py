@@ -1,4 +1,6 @@
 import os
+import sys
+
 import pandas as pd
 from account import Account
 from user import User
@@ -115,70 +117,87 @@ while True:
 
             elif op == 4:
 
-                    if current_object is None:
-                        print("***Please login***")
-
-                    else:
-                        dict = {}
-                        with open(current_object.csv_file, "r") as f:
-                            i = 1
-                            for line in f:
-                                line = line.split(",")
-                                if line[1] == "account_number":
-                                    print("\n" + line[1])
-                                else:
-                                    print(str(i) + " . " + line[1])
-                                    dict[i] = line[1]
-                                    i += 1
-
-
-                    account_number = input("Please enter your account number:")
-                    value = float(input("Amount:"))
-
-                    print("\t  Earning Types")
-                    for key, val in Account.dict_income.items():
-                        print("\t{}. {}".format(key, val))
-
-                    spend_type = int(input("type:"))
-                    if spend_type == 4:
-                        new_income_key = input("Enter new income:")
-                        Account.new_income(new_income_key)
-                        continue
-                    else:
-                        spend_type = Account.dict_income[spend_type]
-
-                        if current_object.earn(dict[account_number], value, spend_type):
-                            print("Earned successfully")
-
-                        else:
-                            print("Wrong account number")
-                        break
-
-            elif op == 5:
                 if current_object is None:
-                    print("***PLEASE LOGIN FIRST***\n")
+                    print("***Please login***")
 
                 else:
-                    account_number = input("account_number:")
-                    value = float(input("value:"))
+                    dict1 = {}
+                    with open(current_object.csv_file, "r") as f:
+                        i = 1
+                        for line in f:
+                            line = line.split(",")
+                            if line[1] == "account_number":
+                                print("\n" + line[1])
+                            else:
+                                print(str(i) + " . " + line[1])
+                                dict1[i] = line[1]
+                                i += 1
+
+                    account_number = int(input("Please enter your account number:"))
+                    value = float(input("Amount:"))
                     while True:
-                        print("\t   COST CATEGORY")
-                        for key, val in Account.dict_cost.items():
+                        print("\t  Earning Types")
+                        for key, val in Account.dict_income.items():
                             print("\t{}. {}".format(key, val))
 
                         spend_type = int(input("type:"))
-                        if spend_type == 4:
-                            new_cost_key = input("Enter new cost:")
+                        if spend_type == 1:
+                            new_income_key = input("Enter new income type:")
+                            Account.new_income(new_income_key)
+                            continue
+                        else:
+                            spend_type = Account.dict_income[spend_type]
+
+                            if current_object.earn(dict1[account_number], value, spend_type):
+                                print("Earned successfully")
+                                break
+
+                            else:
+                                print("Wrong account number")
+                                break
+
+
+            elif op == 5:
+
+                if current_object is None:
+                    print("***Please login***")
+
+                else:
+                    dict1 = {}
+                    with open(current_object.csv_file, "r") as f:
+                        i = 1
+                        for line in f:
+                            line = line.split(",")
+                            if line[1] == "account_number":
+                                print("\n" + line[1])
+                            else:
+                                print(str(i) + " . " + line[1])
+                                dict1[i] = line[1]
+                                i += 1
+
+                    account_number = int(input("Please enter your account number:"))
+
+                    value = float(input("Amount:"))
+                    while True:
+                        print("\t  Cost Types")
+                        for key, val in Account.dict_cost.items():
+                            print("\t{}. {}".format(key, val))
+
+                        spend_type = int(input("Spend type:"))
+                        if spend_type == 1:
+                            new_cost_key = input("Enter new type:")
                             Account.new_cost(new_cost_key)
                             continue
                         else:
                             spend_type = Account.dict_cost[spend_type]
 
-                            if current_object.spend(account_number, value, spend_type):
-                                print("spend successfully")
+                            if current_object.spend(dict1[account_number], value, spend_type):
+                                print("spent successfully")
+                                break
                             else:
-                                print("account_number wrong")
+                                print("wrong Account number ")
                             break
+
 
             elif op == 6:
                 if current_object is None:
@@ -212,15 +231,13 @@ while True:
                 else:
                     account_number = input("account_number:")
                     current_object.display_account_turnover_with_charts(account_number)
-            else:
+            elif op == 10:
                 print("Hope enjoyed our application")
-
-
+                sys.exit()
 
 
         else:
-            logging.error("Enter a number within ran (1-10)")
-
+            logging.error("Enter a number within range (1-10)")
 
     except ValueError:
         logging.error("Input is not valid,please enter a number")
