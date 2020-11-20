@@ -114,9 +114,10 @@ while True:
                     current_object.new_account(account_number, float(initial_amount), bank_name, cart_number)
 
             elif op == 4:
-                while True:
+
                     if current_object is None:
                         print("***Please login***")
+
                     else:
                         dict = {}
                         with open(current_object.csv_file, "r") as f:
@@ -129,7 +130,7 @@ while True:
                                     print(str(i) + " . " + line[1])
                                     dict[i] = line[1]
                                     i += 1
-                                    break
+
 
                     account_number = input("Please enter your account number:")
                     value = float(input("Amount:"))
