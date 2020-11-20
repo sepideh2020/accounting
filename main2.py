@@ -8,6 +8,7 @@ from sign_in import SignIn
 from sign_up import SignUp
 import time
 import logging
+import math
 
 # list of all user
 users = []
@@ -98,9 +99,15 @@ while True:
                         else:
                             print("***Wrong Username or Password***")
                             print('Try Again')
-                        exit = input("Do you want to sign out? Y/N")
-                        if exit in "Yy":  # addad vared kone?
+
+                        exit2 = input("Do you want to sign out? Y/N :")  # agar addad vared kard kar nemikone????????????????
+                        if exit2 in "Yy":
+                            print()
                             exit = 1
+                        else:
+                            logging.error("Enter a valid input")
+                            break
+
 
 
 
@@ -108,12 +115,16 @@ while True:
                 if current_object is None:
                     print("***Please login***")
                 else:
-                    print("New account")
-                    account_number = input("Account number:")
-                    initial_amount = input("Initial amount:")
-                    bank_name = input("Bank name:").strip()
-                    cart_number = input("Cart number:").strip()
-                    current_object.new_account(account_number, float(initial_amount), bank_name, cart_number)
+                    while True:
+                        try:
+                            print("New account")
+                            account_number = int(input("Account number:").strip().replace(" ", ""))
+                            initial_amount = float(input("Initial amount:").replace(" ", ""))
+                            bank_name = str(input("Bank name:").strip())
+                            cart_number = int(input("Cart number:").strip().replace(" ", ""))
+                            current_object.new_account(account_number, initial_amount, bank_name, cart_number)
+                        except ValueError:
+                            logging.error("enter a valid input")
 
             elif op == 4:
 
