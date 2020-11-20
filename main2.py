@@ -43,19 +43,19 @@ sign_in = SignIn()
 
 op = 0
 while True:
-    # Enter a number within range(1-10) if the number was not inrange (1-10) or was not integer give error
+    # Enter a number within range(1-10) if the number was not in range (1-10) or was not integer give error
     print("\n")
-    print("\t   MAIN MENU")
-    print("\t1. REGISTER")
-    print("\t2. LOGIN")
-    print("\t3. NEW ACCOUNT ")
-    print("\t4. EARN")
-    print("\t5. SPEND")
-    print("\t6. TRANSACTIONS")
-    print("\t7. ACCOUNT INFORMATION")
-    print("\t8. Display account turnover with pie charts")
-    print("\t9. Display account turnover with broken line chart")
-    print("\t10.EXIT")
+    print("\t   Main menu")
+    print("\t1. Sign up")
+    print("\t2. login")
+    print("\t3. Add new account ")
+    print("\t4. Earn")
+    print("\t5. Spend")
+    print("\t6. Transaction")
+    print("\t7. Account Information")
+    print("\t8. Display account turnover with Pie Charts")
+    print("\t9. Display account turnover with broken Line Chart")
+    print("\t10.Exit")
     print("\t Select Your Option (1-10)")
     try:
         op = int(input("ENTER :"))
@@ -77,58 +77,82 @@ while True:
                             users.append(User(user_name, pass_word))
 
             elif op == 2:
-                while True:
-                    user_name = input("Username:")
-                    pass_word = input("Password:")
-                    if sign_in.check_user_info(user_name, pass_word):
-                        for user in users:
-                            if user.user_name == user_name:
-                                current_object = user
-                                print('***Welcome***\n')
-                                break
-                        break
-                    else:
-                        print("***Wrong Username or Password***")
-                        print('Try Again')
+                if current_object is not None:
+                    print("{},you already logged in".format(current_object.user_name))
+                else:
+                    exit = 0
+                    while exit != 1:
+
+                        user_name = input("Username:")
+                        pass_word = input("Password:")
+                        if sign_in.check_user_info(user_name, pass_word):
+                            for user in users:
+                                if user.user_name == user_name:
+                                    current_object = user
+                                    print('***Welcome***\n')
+                                    break
+                            break
+
+                        else:
+                            print("***Wrong Username or Password***")
+                            print('Try Again')
+                        exit = input("Do you want to sign out? Y/N")
+                        if exit in "Yy":  # addad vared kone?
+                            exit = 1
+
+
 
             elif op == 3:
                 if current_object is None:
-                    print("***PLEASE LOGIN FIRST***")
+                    print("***Please login***")
                 else:
-                    print("new account")
-                    account_number = input("account_number:")
-                    initial_amount = input("initial_amount:")
-                    bank_name = input("bank_name:").strip(" ").split()
-                    cart_number = input("cart_number:").strip().split()
+                    print("New account")
+                    account_number = input("Account number:")
+                    initial_amount = input("Initial amount:")
+                    bank_name = input("Bank name:").strip()
+                    cart_number = input("Cart number:").strip()
                     current_object.new_account(account_number, float(initial_amount), bank_name, cart_number)
 
             elif op == 4:
-                if current_object is None:
-                    print("***PLEASE LOGIN FIRST***\n")
+                while True:
+                    if current_object is None:
+                        print("***Please login***")
 
-                else:
-                    account_number = input("account_number:")
-                    value = float(input("value:"))
+                    else:
+                        dict = {}
+                        with open(current_object.csv_file, "r") as f:
+                            i = 1
+                            for line in f:
+                                line = line.split(",")
+                                if line[1] == "account_number":
+                                    print("\n" + line[1])
+                                else:
+                                    print(str(i) + " . " + line[1])
+                                    dict[i] = line[1]
+                                    i += 1
+                                    break
 
-                    while True:
-                        print("\t   EARN CATEGORY")
-                        for key, val in Account.dict_income.items():
-                            print("\t{}. {}".format(key, val))
+                    account_number = input("Please enter your account number:")
+                    value = float(input("Amount:"))
 
-                        spend_type = int(input("type:"))
-                        if spend_type == 0:
-                            new_income_key = input("Enter new income:")
-                            Account.new_income(new_income_key)
-                            continue
+                    print("\t  Earning Types")
+                    for key, val in Account.dict_income.items():
+                        print("\t{}. {}".format(key, val))
+
+                    spend_type = int(input("type:"))
+                    if spend_type == 4:
+                        new_income_key = input("Enter new income:")
+                        Account.new_income(new_income_key)
+                        continue
+                    else:
+                        spend_type = Account.dict_income[spend_type]
+
+                        if current_object.earn(dict[account_number], value, spend_type):
+                            print("Earned successfully")
+
                         else:
-                            spend_type = Account.dict_income[spend_type]
-
-                            if current_object.earn(account_number, value, spend_type):
-                                print("earn successfully")
-
-                            else:
-                                print("account_number wrong")
-                            break
+                            print("Wrong account number")
+                        break
 
             elif op == 5:
                 if current_object is None:
@@ -143,7 +167,7 @@ while True:
                             print("\t{}. {}".format(key, val))
 
                         spend_type = int(input("type:"))
-                        if spend_type == 0:
+                        if spend_type == 4:
                             new_cost_key = input("Enter new cost:")
                             Account.new_cost(new_cost_key)
                             continue
@@ -171,6 +195,7 @@ while True:
                 else:
                     account_number = input("account_number:")
                     current_object.show_account(account_number)
+                    # nabashe hesab chizi nemige!!
 
             elif op == 8:
                 if current_object is None:
@@ -188,7 +213,7 @@ while True:
                     account_number = input("account_number:")
                     current_object.display_account_turnover_with_charts(account_number)
             else:
-                print("Bye")
+                print("Hope enjoyed our application")
 
 
 

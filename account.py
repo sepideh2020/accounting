@@ -5,10 +5,10 @@ import pandas as pd
 
 class Account:
     # there are two class variable that are type of incomes and costs
-    cost= ["Food", "clothing", "housing"]
-    income = ["Salary", "profit_of_capital", "inheritance"]
-    dict_income = {0: 'other', 1 : 'salary', 2 : 'profit_of_capital', 3 : 'inheritance'}
-    dict_cost = {0: 'other', 1 : 'Food', 2 : 'clothing', 3 : 'housing'}
+    cost = ["Housing", "Food", "Clothing"]
+    income = ["Inheritance", "Salary", "Stock market", ]
+    dict_income = {1: 'other', 2: 'Salary', 3: 'Stock market', 4:'Inheritance'}
+    dict_cost = {1:'other', 2: 'Food', 3: 'clothing', 4: 'Housing'}
 
     def __init__(self, account_number, initial_amount, bank_name, cart_number, directory):
         """for each account init it`s attributes then create .log and .csv for it """
@@ -42,8 +42,6 @@ class Account:
         new_income.lower()
         cls.dict_income[len(cls.dict_income)] = new_income
 
-
-
     @classmethod
     def new_cost(cls, new_cost):
         """add new cost"""
@@ -64,5 +62,4 @@ class Account:
 
     def __str__(self):
         """print for account"""
-        return "Balance: {} Bank_name: {} cart_number: {}" .format(str(self.balance) ,self.bank_name,self.cart_number)
-
+        return "Balance: {} Bank_name: {} cart_number: {}".format(str(self.balance), self.bank_name, self.cart_number)
