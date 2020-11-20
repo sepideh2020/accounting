@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 
-class SignIn:#ورود
+class SignIn:
     """class for sign in and check whether the user exists or not"""
 
     def __init__(self):
@@ -53,8 +53,3 @@ class SignIn:#ورود
                 return False
         except Exception:
             return False
-
-
-# signin = SignIn()
-# print(signin.check_user_info("hossain", "ALI"))
-
